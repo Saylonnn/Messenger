@@ -37,10 +37,10 @@ public class VolleyRequest {
                     public void onResponse(String response) {
                         for (MainActivity x : callbackApp) {
                             if(response.toString().equals("accepted")){
-                                x.getAnswer("accepted");
+                                x.getAnswer("login", "accepted");
                             }
                             else{
-                                x.getAnswer("declined");
+                                x.getAnswer("login", "declined");
                             }
                         }
                     }
@@ -49,11 +49,15 @@ public class VolleyRequest {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         for(MainActivity x : callbackApp){
+
                             if(error.toString().equals("com.android.volley.AuthFailureError")){
-                                x.getAnswer("declined");
+                                x.getAnswer("login", "declined");
                             }
-                            else {
-                                x.getAnswer(error.toString());
+                            else if(error.getMessage().equals("java.net.ConnectException: Failed to connect to www.api.caylonn.de/116.203.144.88:1337")){
+                                x.getAnswer("login", "service unreachable");
+                            }
+                            else{
+                                x.getAnswer("login", error.getMessage());
                             }
                         }
                     }
