@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.saylonn.messenger.Comm.VolleyRequest;
@@ -12,8 +13,11 @@ import com.saylonn.messenger.Comm.VolleyRequest;
 
 public class MainActivity extends AppCompatActivity{
     TextView tv;
+    EditText tf_username;
+    EditText tf_password;
     Button login_btn;
     VolleyRequest vr;
+    Boolean loggedIn = false;
 
 
     @Override
@@ -23,6 +27,8 @@ public class MainActivity extends AppCompatActivity{
 
         tv = findViewById(R.id.main_tv);
         login_btn = findViewById(R.id.login_btn);
+        tf_username = findViewById(R.id.tf_username);
+        tf_password = findViewById(R.id.tf_password);
 
 
         //Do login Request
@@ -31,13 +37,22 @@ public class MainActivity extends AppCompatActivity{
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                vr.login("me", "ecretpassword");
+                vr.login(tf_username.getText().toString(), tf_password.getText().toString());
             }
         });
     }
 
-    public void getAnswer(String x){
-        tv.setText(x);
+    public void getAnswer(String targetFunc, String x){
+        if(targetFunc.equals("login")){
+            if (x.equals("accepted")){
+                loggedIn = true;
+                tv.setText(x);
+            }
+        else{
+            tv.setText(x);
+            }
+        }
+
     }
 
 
