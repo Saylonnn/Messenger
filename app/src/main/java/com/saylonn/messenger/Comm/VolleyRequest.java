@@ -1,7 +1,6 @@
 package com.saylonn.messenger.Comm;
 
 
-import android.app.Application;
 import android.content.Context;
 
 import com.android.volley.AuthFailureError;
@@ -11,9 +10,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.saylonn.messenger.LoginFragment;
 import com.saylonn.messenger.MainActivity;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.Map;
 
 public class VolleyRequest {
 
-    private List<MainActivity> callbackApp = new ArrayList<>();
+    private List<LoginFragment> callbackApp = new ArrayList<>();
     RequestQueue queue;
     String url = "https://www.api.caylonn.de:1337";
 
@@ -35,7 +34,7 @@ public class VolleyRequest {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        for (MainActivity x : callbackApp) {
+                        for (LoginFragment x : callbackApp) {
                             if(response.toString().equals("accepted")){
                                 x.getAnswer("login", "accepted");
                             }
@@ -48,7 +47,7 @@ public class VolleyRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        for(MainActivity x : callbackApp){
+                        for(LoginFragment x : callbackApp){
 
                             if(error.toString().equals("com.android.volley.AuthFailureError")){
                                 x.getAnswer("login", "declined");
@@ -73,7 +72,7 @@ public class VolleyRequest {
         queue.add(stringRequest);
     }
 
-    public void addCallbackListener(MainActivity ma){
+    public void addCallbackListener(LoginFragment ma){
         callbackApp.add(ma);
     }
 
