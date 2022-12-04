@@ -1,23 +1,19 @@
 package com.saylonn.messenger;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.saylonn.messenger.Comm.VolleyRequest;
 
 public class LoginFragment extends AppCompatActivity{
     TextView tv;
-    EditText tf_username;
-    EditText tf_password;
+    EditText pt_username;
+    EditText pt_password;
     Button login_btn;
     VolleyRequest vr;
     Boolean loggedIn = false;
@@ -28,10 +24,10 @@ public class LoginFragment extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        tv = findViewById(R.id.main_tv);
-        login_btn = findViewById(R.id.login_btn);
-        tf_username = findViewById(R.id.tf_username);
-        tf_password = findViewById(R.id.tf_password);
+        tv = findViewById(R.id.tv_login_error);
+        login_btn = findViewById(R.id.btn_login_loginbtn);
+        pt_username = findViewById(R.id.pt_login_username);
+        pt_password = findViewById(R.id.pt_login_password);
 
 
         //Do login Request
@@ -40,7 +36,7 @@ public class LoginFragment extends AppCompatActivity{
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                vr.login(tf_username.getText().toString(), tf_password.getText().toString());
+                vr.login(pt_username.getText().toString(), pt_password.getText().toString());
             }
         });
     }
@@ -57,7 +53,4 @@ public class LoginFragment extends AppCompatActivity{
         }
 
     }
-
-
-
 }
