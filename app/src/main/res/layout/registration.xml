@@ -77,7 +77,7 @@
         android:ems="10"
         android:hint="repeat password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintBottom_toTopOf="@+id/guideline80"
         app:layout_constraintEnd_toEndOf="@+id/pw_register_password"
         app:layout_constraintStart_toStartOf="@+id/pw_register_password"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
@@ -87,24 +87,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.10670315" />
+        app:layout_constraintGuide_percent="0.2" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
+        android:id="@+id/guideline80"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9015048" />
+        app:layout_constraintGuide_percent="0.8" />
 
     <Button
         android:id="@+id/btn_register_registerbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="register"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline80"
         app:layout_constraintEnd_toEndOf="@+id/pw_register_passwordRepeat"
         app:layout_constraintStart_toStartOf="@+id/pw_register_passwordRepeat"
-        app:layout_constraintTop_toBottomOf="@+id/pw_register_passwordRepeat" />
+        app:layout_constraintTop_toTopOf="@+id/guideline80" />
 
     <TextView
         android:id="@+id/tv_register_errorUsername"
@@ -141,5 +141,6 @@
         android:textColor="#F44336"
         app:layout_constraintBottom_toTopOf="@+id/pw_register_passwordRepeat"
         app:layout_constraintStart_toStartOf="@+id/pw_register_passwordRepeat" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
