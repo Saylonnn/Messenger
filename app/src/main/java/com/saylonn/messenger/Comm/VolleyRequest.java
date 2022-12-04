@@ -9,9 +9,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.saylonn.messenger.MainActivity;
+
+import org.json.JSONObject;
 
 import java.sql.Array;
 import java.util.ArrayList;
@@ -72,6 +75,35 @@ public class VolleyRequest {
         };
         queue.add(stringRequest);
     }
+
+    public void register(String email, String username, String password){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("email", email);
+        params.put("username", username);
+        params.put("password", password);
+        String custUrl = url + "/auth/register";
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST,
+                custUrl, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        for (MainActivity x : callbackApp) {
+                            x.getAnswer("login", response.toString());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        for (MainActivity x : callbackApp){
+                            x.getAnswer("login", error.getMessage());
+                        }
+                    }
+                });
+        queue.add(stringRequest);
+    }
+
+
 
     public void addCallbackListener(MainActivity ma){
         callbackApp.add(ma);
