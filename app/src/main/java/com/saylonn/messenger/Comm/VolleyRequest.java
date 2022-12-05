@@ -69,7 +69,7 @@ public class VolleyRequest {
 
 
 
-    public void addCallbackListener(LoginFragment ma){
+    public void addCallbackListener(CallbackInterface ma){
         callbackApps.add(ma);
     }
 }

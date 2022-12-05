@@ -1,53 +1,56 @@
 package com.saylonn.messenger.ui;
 
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.google.android.material.textfield.TextInputEditText;
 import com.saylonn.messenger.Comm.VolleyRequest;
 import com.saylonn.messenger.Interfaces.CallbackInterface;
 import com.saylonn.messenger.R;
 
-public class LoginFragment extends AppCompatActivity implements CallbackInterface {
-    private final String TAG = "MyActivity";
-    TextView tv;
-    EditText pt_username;
-    EditText pt_password;
-    Button login_btn;
-    VolleyRequest vr;
-    Boolean loggedIn = false;
+import java.util.Objects;
 
+public class LoginFragment extends Fragment implements CallbackInterface {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "started");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_login, container, false);
 
-        tv = findViewById(R.id.tv_login_error);
-        login_btn = findViewById(R.id.login_btn);
-        pt_username = findViewById(R.id.pt_login_username);
-        pt_password = findViewById(R.id.pt_login_password);
-
-
-        //Do login Request
-        vr = new VolleyRequest(this.getApplicationContext());
+        VolleyRequest vr = new VolleyRequest(requireActivity().getBaseContext());
         vr.addCallbackListener(this);
-        login_btn.setOnClickListener(view -> {
-            Log.d(TAG, "login onClick called");
-            vr.login(pt_username.getText().toString(), pt_password.getText().toString());
-            Log.d(TAG, "login onClick called");
+
+
+        TextView errorTv = root.findViewById(R.id.errorTv);
+        TextInputEditText email = root.findViewById(R.id.emailTE);
+        TextInputEditText password = root.findViewById(R.id.passwordTE);
+        Button loginBtn = root.findViewById(R.id.loginBtn);
+
+        loginBtn.setOnClickListener(View -> {
+            Log.d("myapp", "onClick");
+            vr.login(email.getText().toString(), password.getText().toString());
+            Log.d("login on click", "clicked");
         });
+
+
+
+
+
+
+
+        return root;
     }
 
     @Override
-    public void callbackFunction(String targetFunc, String message){
-        tv.setText(message);
+    public void callbackFunction(String targetFunction, String message) {
 
     }
 }
