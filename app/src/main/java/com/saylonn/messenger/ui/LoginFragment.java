@@ -1,6 +1,7 @@
-package com.saylonn.messenger;
+package com.saylonn.messenger.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,8 +10,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.saylonn.messenger.Comm.VolleyRequest;
+import com.saylonn.messenger.Interfaces.CallbackInterface;
+import com.saylonn.messenger.R;
 
-public class LoginFragment extends AppCompatActivity{
+public class LoginFragment extends AppCompatActivity implements CallbackInterface {
+    private final String TAG = "MyActivity";
     TextView tv;
     EditText pt_username;
     EditText pt_password;
@@ -21,11 +25,12 @@ public class LoginFragment extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
         tv = findViewById(R.id.tv_login_error);
-        login_btn = findViewById(R.id.btn_login_loginbtn);
+        login_btn = findViewById(R.id.login_btn);
         pt_username = findViewById(R.id.pt_login_username);
         pt_password = findViewById(R.id.pt_login_password);
 
@@ -33,24 +38,16 @@ public class LoginFragment extends AppCompatActivity{
         //Do login Request
         vr = new VolleyRequest(this.getApplicationContext());
         vr.addCallbackListener(this);
-        login_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                vr.login(pt_username.getText().toString(), pt_password.getText().toString());
-            }
+        login_btn.setOnClickListener(view -> {
+            Log.d(TAG, "login onClick called");
+            vr.login(pt_username.getText().toString(), pt_password.getText().toString());
+            Log.d(TAG, "login onClick called");
         });
     }
 
-    public void getAnswer(String targetFunc, String x){
-        if(targetFunc.equals("login")){
-            if (x.equals("accepted")){
-                loggedIn = true;
-                tv.setText(x);
-            }
-            else{
-                tv.setText(x);
-            }
-        }
+    @Override
+    public void callbackFunction(String targetFunc, String message){
+        tv.setText(message);
 
     }
 }

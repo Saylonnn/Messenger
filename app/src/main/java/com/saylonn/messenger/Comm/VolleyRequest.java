@@ -1,26 +1,26 @@
 package com.saylonn.messenger.Comm;
 
-
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.saylonn.messenger.LoginFragment;
-import com.saylonn.messenger.MainActivity;
+import com.saylonn.messenger.Interfaces.CallbackInterface;
+import com.saylonn.messenger.ui.LoginFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class VolleyRequest {
-
-    private List<LoginFragment> callbackApp = new ArrayList<>();
+    private static final String TAG = "MyActivity";
+    private List<CallbackInterface> callbackApps = new ArrayList<>();
     RequestQueue queue;
     String url = "https://www.api.caylonn.de:1337";
 
@@ -28,53 +28,48 @@ public class VolleyRequest {
         queue = Volley.newRequestQueue(context);
     }
 
-    public void login(String username, String hash){
-        String custUrl = url + "/auth/login";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, custUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        for (LoginFragment x : callbackApp) {
-                            if(response.toString().equals("accepted")){
-                                x.getAnswer("login", "accepted");
-                            }
-                            else{
-                                x.getAnswer("login", "declined");
-                            }
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        for(LoginFragment x : callbackApp){
+    public void login(String email, String password){
+        Log.d(TAG, "login called");
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("email", email);
+            jsonBody.put("password", password);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        doStringRequest("login", "/auth/login", jsonBody, Request.Method.GET);
+    }
 
-                            if(error.toString().equals("com.android.volley.AuthFailureError")){
-                                x.getAnswer("login", "declined");
-                            }
-                            else if(error.getMessage().equals("java.net.ConnectException: Failed to connect to www.api.caylonn.de/116.203.144.88:1337")){
-                                x.getAnswer("login", "service unreachable");
-                            }
-                            else{
-                                x.getAnswer("login", error.getMessage());
-                            }
-                        }
+    public void doStringRequest(String function, String urlExtension, JSONObject params, int methode){
+        Log.d("debug", "method doStringRequestCalled");
+        String custURL = url + urlExtension;
+        StringRequest stringRequest = new StringRequest(methode, custURL,
+                response -> {
+                    for (CallbackInterface x : callbackApps) {
+                        x.callbackFunction(function, response.toString());
+                    }
+                }, error -> {
+                    for (CallbackInterface x : callbackApps){
+                        x.callbackFunction(function, error.toString());
                     }
                 }){
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("username", username);
-                params.put("password", hash);
-                return params;
+             public String getBodyContentType(){
+                return "application/json; charset=utf-8";
+             }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                String mRequestBody = params.toString();
+                return mRequestBody == null ? null: mRequestBody.getBytes(StandardCharsets.UTF_8);
             }
         };
         queue.add(stringRequest);
     }
 
+
+
     public void addCallbackListener(LoginFragment ma){
-        callbackApp.add(ma);
+        callbackApps.add(ma);
     }
-
-
 }
