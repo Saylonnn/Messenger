@@ -19,6 +19,8 @@ import com.saylonn.messenger.R;
 import java.util.Objects;
 
 public class LoginFragment extends Fragment implements CallbackInterface {
+    TextView errorTv;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,7 +31,7 @@ public class LoginFragment extends Fragment implements CallbackInterface {
         vr.addCallbackListener(this);
 
 
-        TextView errorTv = root.findViewById(R.id.errorTv);
+        errorTv = root.findViewById(R.id.errorTv);
         TextInputEditText email = root.findViewById(R.id.emailTE);
         TextInputEditText password = root.findViewById(R.id.passwordTE);
         Button loginBtn = root.findViewById(R.id.loginBtn);
@@ -37,7 +39,7 @@ public class LoginFragment extends Fragment implements CallbackInterface {
         loginBtn.setOnClickListener(View -> {
             Log.d("myapp", "onClick");
             vr.login(email.getText().toString(), password.getText().toString());
-            Log.d("login on click", "clicked");
+            Log.d("myapp", "clicked");
         });
 
 
@@ -51,6 +53,6 @@ public class LoginFragment extends Fragment implements CallbackInterface {
 
     @Override
     public void callbackFunction(String targetFunction, String message) {
-
+        errorTv.setText(message);
     }
 }
