@@ -2,17 +2,25 @@ package com.saylonn.messenger.Comm;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.saylonn.messenger.Interfaces.CallbackInterface;
+import com.saylonn.messenger.MainActivity;
+import com.saylonn.messenger.R;
 import com.saylonn.messenger.ui.LoginFragment;
 
 import org.json.JSONException;
@@ -30,8 +38,10 @@ public class VolleyRequest {
     private List<CallbackInterface> callbackApps = new ArrayList<>();
     RequestQueue queue;
     String url = "https://www.api.caylonn.de:1337";
+    Context context;
 
     public VolleyRequest(Context context){
+        this.context = context;
         queue = Volley.newRequestQueue(context);
     }
 
@@ -53,6 +63,9 @@ public class VolleyRequest {
                         x.callbackFunction(function, response.toString());
                     }
                 }, error -> {
+                    String message = context.getString(R.string.serverErrorMessage);
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
                     for (CallbackInterface x : callbackApps){
                         x.callbackFunction(function, error.getMessage());
                     }
@@ -61,6 +74,7 @@ public class VolleyRequest {
             public Map<String, String> getHeaders() throws AuthFailureError{
                 return headerParams;
             }
+
         };
         queue.add(stringRequest);
     }
