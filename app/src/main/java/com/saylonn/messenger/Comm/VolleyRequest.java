@@ -1,6 +1,8 @@
 package com.saylonn.messenger.Comm;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.saylonn.messenger.FCM.MyFirebaseMessagingService;
 import com.saylonn.messenger.Interfaces.CallbackInterface;
 import com.saylonn.messenger.MainActivity;
 import com.saylonn.messenger.R;
@@ -32,13 +35,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.prefs.Preferences;
 
 public class VolleyRequest {
-    private static final String TAG = "myapp";
+    private static final String TAG = "VolleyRequest";
     private List<CallbackInterface> callbackApps = new ArrayList<>();
     RequestQueue queue;
     String url = "https://www.api.caylonn.de:1337";
     Context context;
+    MyFirebaseMessagingService fms = new MyFirebaseMessagingService();
 
     public VolleyRequest(Context context){
         this.context = context;
@@ -47,10 +52,13 @@ public class VolleyRequest {
 
     public void login(String email, String password){
         Log.d(TAG, "login called with "+ email + " " + password);
-
+        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //String token = sharedPreferences.getString("token_key", "none");
+        ///Log.d(TAG, "token: "+ token);
         Map<String, String> headerParams = new HashMap<String, String>();
         headerParams.put("email", email);
         headerParams.put("password", password);
+        //headerParams.put("token", token);
         doStringRequest("login", "/auth/login", headerParams, Request.Method.GET);
     }
 
